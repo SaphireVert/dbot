@@ -30,7 +30,6 @@ const abo = () => {
     .setDescription('https://www.youtube.com/channel/UCWC87vcR72VDYM7AGBzuBDQ');
 }
 
-msg.reply('Coucou les gens! Je suis là!');
 // Surveille le status
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
