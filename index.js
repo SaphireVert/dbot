@@ -29,15 +29,18 @@ const abo = () => {
     // Le contenu de l'encart
     .setDescription('https://www.youtube.com/channel/UCWC87vcR72VDYM7AGBzuBDQ');
 }
-
 // Surveille le status
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  client.channels.get('628484270632992781').send('Hey! Je suis là!')
 });
 
 // Surveille les messages
 client.on('message', msg => {
 
+  if (msg.content === 'test3') {     // Si le message dit "^^ping"
+    msg.reply('TEST2!!!!!');   // Répond "Pong!"
+  }
   if (msg.content === 'test2') {     // Si le message dit "^^ping"
     msg.reply('TEST2!!!!!');   // Répond "Pong!"
   }
