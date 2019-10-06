@@ -11,6 +11,9 @@ try {
   BoToken = process.env.BOT_TOKEN;
 }
 
+let Parser = require('rss-parser');
+let parser = new Parser();
+
 // Requière la librairie Discord
 const { Client, RichEmbed, Attachment } = require('discord.js');
 const getJSON = require('get-json');
@@ -35,8 +38,72 @@ client.on('ready', () => {
   client.channels.get('628484270632992781').send('Hey! Je suis là!')
 });
 
+async function yt(msg){
+  let feed = await parser.parseURL('https://www.youtube.com/feeds/videos.xml?channel_id=UCN25q81_zmzVMMRGxMvEf4w');
+  console.log(feed.title, feed.feedUrl, feed.link);
+  for (i=0; i<3; i++) {
+    console.log(feed.items[i])
+    msg.channel.send(feed.items[i].title + " " + feed.items[i].link)
+  }
+  msg.channel.send("Youtuber " + feed.title);
+  return "youtube"
+}
+async function th(msg){
+  let feed = await parser.parseURL('https://www.tomshardware.fr/feed/');
+  msg.channel.send("Dernières actu de " + feed.title);
+  console.log(feed.title, feed.feedUrl, feed.link);
+  for (i=0; i<3; i++) {
+    console.log(feed.items[i])
+    msg.channel.send("---\n\n:triangular_flag_on_post: "
+                    + feed.items[i].title + " (" + feed.items[i].link + ")")
+  }
+  return "nothing"
+}
+
+// Ecrire du code pour que la commande /ajoute XYZ:
+// 1- Vérifie que le fichier de stockage existe, et le crée si il n'existe pas
+// 2- Ajoute le XYZ à la fin du fichier.
+// Ecrire la commande /lit qui retourne dans le channel discord le contenu total du fichier.
+
+var fs = require('fs');
+const DATAFILE = 'data.txt';
+let oldContent = ''
+
 // Surveille les messages
 client.on('message', msg => {
+
+  if (msg.content.substring(0, 8) === '/ajoute ') {      // si qqn tape "/lit"
+    // Envoie le resultat de la fonction abo()
+    let newContent = msg.content.substring(8)
+    console.log(newContent);
+    try {
+      oldContent = fs.readFileSync(DATAFILE, 'utf8')
+    } catch (e) {
+      console.log(e)
+    }
+    fs.writeFile(DATAFILE, oldContent + "\n" + newContent, function(err) {
+      // If an error occurred, show it and return
+      if(err) return console.error(err);
+      // Successfully wrote binary contents to the file!
+    });
+  }
+  if (msg.content === '/lit') {      // si qqn tape "/lit"
+    // Envoie le resultat de la fonction abo()
+    msg.channel.send('Lit qqch');
+    msg.channel.send(fs.readFileSync(DATAFILE, 'utf8'));
+  }
+
+  if (msg.content === 'yt') {      // si qqn tape "yt"
+    // Envoie le resultat de la fonction abo()
+    yt(msg)
+    msg.channel.send('Voila');
+  }
+
+  if (msg.content === 'th') {      // si qqn tape "th"
+    // Envoie le resultat de la fonction abo()
+    th(msg)
+    msg.channel.send('Voila');
+  }
 
   if (msg.content === 'test3') {     // Si le message dit "^^ping"
     msg.reply('TEST2!!!!!');   // Répond "Pong!"

@@ -26,6 +26,7 @@
   "homepage": "https://github.com/theophile06/dbot#readme",
   "dependencies": {
     "discord.js": "^11.4.2",
-    "get-json": "^1.0.1"
+    "get-json": "^1.0.1",
+    "rss-parser": "^3.7.2"
   }
 }
